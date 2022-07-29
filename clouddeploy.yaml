@@ -22,7 +22,7 @@ metadata:
   name: dev
 description: Dev cluster
 gke:
-  cluster: projects/poc-devops-eqtl/locations/us-central1/clusters/devcluster
+  cluster: projects/$PROJECT_ID/locations/us-central1/clusters/devcluster
 ---
 
 apiVersion: deploy.cloud.google.com/v1beta1
@@ -31,7 +31,7 @@ metadata:
   name: qa
 description: QA cluster
 gke:
-  cluster: projects/poc-devops-eqtl/locations/us-central1/clusters/qacluster
+  cluster: projects/$PROJECT_ID/locations/us-central1/clusters/qacluster
 ---
 
 apiVersion: deploy.cloud.google.com/v1beta1
@@ -41,4 +41,4 @@ metadata:
 description: prod cluster
 requireApproval: true
 gke:
-  cluster: projects/poc-devops-eqtl/locations/us-central1/clusters/prodcluster
+  cluster: projects/$PROJECT_ID/locations/us-central1/clusters/prodcluster

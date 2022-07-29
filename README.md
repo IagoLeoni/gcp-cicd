@@ -8,8 +8,8 @@ The main files/folders in this repository are:
 - bootstrap/init.sh contains initial configurations
 - bootstrap/gke-cluster-init.sh contains commands to create the k8s clusters where the application will run (targets of cloud deploy)
 - k8s contains base and overlays files for Kustomize
-- cloudbuid.yaml contains the pipeline build steps
-- clouddeploy.yaml is used to create the pipeline and the deploy targets
+- cloudbuid.yaml contains the pipeline build steps (GCP Cloud Build Config File)
+- clouddeploy.yaml is used to create the pipeline and the deploy targets (GCP Cloud Deploy Config File)
 
 ## Create a repo
 This demo relies on you making git check-ins/pushes to simulate a development workflow. Fork this repo, or otherwise copy it into your own Github repo.
