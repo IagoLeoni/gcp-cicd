@@ -1,0 +1,44 @@
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: DeliveryPipeline
+metadata:
+  name: default-pipeline
+description: Default Pipeline
+serialPipeline:
+ stages:
+ - targetId: dev
+   profiles:
+   - qa
+ - targetId: qa
+   profiles:
+   - qa
+ - targetId: prod
+   profiles:
+   - prod
+---
+
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+  name: dev
+description: Dev cluster
+gke:
+  cluster: projects/poc-devops-eqtl/locations/us-central1/clusters/devcluster
+---
+
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+  name: qa
+description: QA cluster
+gke:
+  cluster: projects/poc-devops-eqtl/locations/us-central1/clusters/qacluster
+---
+
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+  name: prod
+description: prod cluster
+requireApproval: true
+gke:
+  cluster: projects/poc-devops-eqtl/locations/us-central1/clusters/prodcluster

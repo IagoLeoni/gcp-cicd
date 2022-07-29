@@ -1,0 +1,32 @@
+apiVersion: skaffold/v2beta16
+kind: Config
+metadata:
+  name: hello-world-python
+build:
+  local: 
+    push: true
+  artifacts:
+  - image: default-app
+    context: app
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kustomize:
+    paths: 
+      - k8s/overlays/dev
+portForward:
+- resourceType: deployment
+  resourceName: hello-world-python
+  port: 8080 
+  localPort: 8080
+profiles:
+  - name: qa
+    deploy:
+      kustomize:
+        paths: 
+          - k8s/overlays/qa
+  - name: prod
+    deploy:
+      kustomize:
+        paths: 
+          - k8s/overlays/prod

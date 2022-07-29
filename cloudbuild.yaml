@@ -1,0 +1,30 @@
+# To build and deploy to Cloud Run, run from this directory:
+# $ gcloud builds submit app --config=cloudbuild.yaml 
+steps:
+  # Build app
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '.', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/containers-repo/default-app:${COMMIT_SHA}', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/containers-repo/default-app','-f', 'Dockerfile']
+    dir: 'app'  
+    id: build
+  # Run unit tests
+  - name: us-central1-docker.pkg.dev/$PROJECT_ID/containers-repo/default-app
+    entrypoint: python
+    args: ["-m","pytest","unit_tests.py"]
+    dir: 'app'
+    id: test
+  
+  # Push docker image and save image digest for kritis check
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/containers-repo/default-app']
+    id: push
+  # Create release in Google Cloud Deploy
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args: 
+      [
+        "beta", "deploy", "releases", "create", "rel-${SHORT_SHA}",
+        "--delivery-pipeline", "default-pipeline",
+        "--region", "us-central1",
+        "--annotations", "commitId=${REVISION_ID}",
+        "--images", "default-app=us-central1-docker.pkg.dev/$PROJECT_ID/containers-repo/default-app:latest"
+      ]
