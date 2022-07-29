@@ -1,4 +1,4 @@
-# Google Cloud CI/CD End-to-End + Sonarqube Quality Gate Demo
+# CI/CD Pipeline using Google Cloud
 This repo demonstrates Kubernetes development and deployment with Skaffold and Google Cloud devops tools Google Cloud Build, Cloud Deploy, and Artifact Registry. The example is a simple Hello World Python app and uses Kustomize overlays for manifest generation. 
 
 ## Repository structure
@@ -28,10 +28,10 @@ The `init.sh` script is provided to bootstrap much of the configuration setup. Y
   * Follow the [docs](https://cloud.google.com/build/docs/automating-builds/build-repos-from-github) and create a Github App connected repo and trigger.
 
 ## Create GKE clusters
-You'll need GKE clusters to deploy out to as part of the demo. This repo refers to three clusters:
-* testcluster
-* stagingcluster
-* productcluster
+You'll need GKE clusters (Auto Pilot) to deploy out to as part of the demo. This repo refers to three clusters:
+* devcluster (Development)
+* qacluster (QA)
+* prodcluster (PROD)
 
 If you have/want different cluster names update cluster definitions in the gke-cluster-init.sh bash script and in clouddeploy.yaml
 
@@ -49,23 +49,12 @@ You must give Cloud Build explicit permission to trigger a Cloud Deploy release.
   * Cloud Deploy Releaser
   * Service Account User
 
-## Sonarqube  
-This demo is using the Sonarqube community cloud builder (https://github.com/GoogleCloudPlatform/cloud-builders-community/tree/master/sonarqube)
-
-Follow the builder documentation to setup the authentication and sonarqube docs to setup the Sonarqube project
-
-This demo is using sonarcloud.oi (Sonarqube cloud/SaaS), in order to use it, it is free for public/open source repositories.
-
-## Secret Manager
-This demo is using secrets from Secret Manager to store and retrieve some sensitive information, like Sonarqube user and token, to setup and use Secret Manager with Cloud Build, follow these steps: https://cloud.google.com/build/docs/securing-builds/use-secrets
-
-## Demo
+## Flow
 The demo is very simple at this stage, some steps that can be followed to show the e2e pipeline:
 1. User commits a change the main branch of the repo
 2. Cloud Build is automatically triggered, which:
   * builds the image
   * runs unit tests
-  * checks the code with Sonarqube (set -Dsonar.qualitygate.wait true if you want the build to fail if the code doesn't meet the quality requirements)
   * pushes the image to artifact registry
   * creates a Cloud Deploy release in the pipeline
 3. User then navigates to Cloud Deploy UI and shows promotion events:
