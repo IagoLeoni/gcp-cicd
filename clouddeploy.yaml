@@ -1,3 +1,4 @@
+#You can update the $PROJECT_ID with your project name
 apiVersion: deploy.cloud.google.com/v1beta1
 kind: DeliveryPipeline
 metadata:

@@ -3,15 +3,13 @@
 export PROJECT_ID="project-id-here"
 # sets the current project for gcloud
 gcloud config set project $PROJECT_ID
-# Enables various APIs you'll need
+# Enable APIs you'll need
 gcloud services enable container.googleapis.com cloudbuild.googleapis.com \
 artifactregistry.googleapis.com clouddeploy.googleapis.com \
 cloudresourcemanager.googleapis.com
 # creates the Artifact Registry repo (name: containers-repo)
-gcloud artifacts repositories create containers-repo --locatils
-on=us-central1 \
---repository-format=docker
-# creates the Google Cloud Deploy pipeline
+gcloud artifacts repositories create containers-repo --location=us-central1 --repository-format=docker
+# creates GCP Deploy pipeline (Cloud Deploy - default-pipeline)
 gcloud beta deploy apply --file clouddeploy.yaml \
 --region=us-central1 --project=$PROJECT_ID
 #Cloud Deploy Roles
@@ -26,11 +24,13 @@ gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcl
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com --role="roles/clouddeploy.releaser"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com --role="roles/clouddeploy.serviceAgent"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com --role="roles/compute.serviceAgent"
+gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")-compute@developer.gserviceaccount.com --role="roles/iam.serviceAccountUser"
 #Cloud Build Roles
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role="roles/artifactregistry.writer"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role="roles/cloudbuild.builds.builder"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role="roles/clouddeploy.jobRunner"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role="roles/clouddeploy.releaser"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role="roles/logging.logWriter"
+gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")@cloudbuild.gserviceaccount.com --role="roles/iam.serviceAccountUser"
 
 echo "init done. To create clusters, run: ./gke-cluster-init.sh"

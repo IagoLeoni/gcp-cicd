@@ -6,22 +6,22 @@ The main files/folders in this repository are:
 
 - app/Dockerfile specifies how the application is built and packaged
 - bootstrap/init.sh contains initial configurations
-- bootstrap/gke-cluster-init.sh contains commands to create the k8s clusters where the application will run (targets of cloud deploy)
+- bootstrap/gke-cluster-init.sh contains commands to create the k8s clusters where the application will run (targets of Cloud deploy)
 - k8s contains base and overlays files for Kustomize
 - cloudbuid.yaml contains the pipeline build steps (GCP Cloud Build Config File)
 - clouddeploy.yaml is used to create the pipeline and the deploy targets (GCP Cloud Deploy Config File)
 
-## Create a repo
+## Fork this Repo
 This demo relies on you making git check-ins/pushes to simulate a development workflow. Fork this repo, or otherwise copy it into your own Github repo.
 
-## Bootstrap Google Cloud demo
-Bootstrap scripts are in the `bootstrap` folder.
+## Scripts Google Cloud demo
+All scripts to deploy this demo are inside of "scripts" folder
 
-The `init.sh` script is provided to bootstrap much of the configuration setup. You'll still need to do some steps manually after this script runs though.
+The `init.sh` script is provided to bootstrap much of the configuration setup. You'll still need to do some steps manually after this script runs though:
 
 1. Clone this repo and commit it to your own git repo.
-2. Replace project-id-here with your Google Cloud project-id on line 3.
-3. run `. ./bootstrap/init.sh`
+2. Replace "project-id-here" with your Google Cloud project-id on line 3.
+3. run `./scripts/init.sh`
 4. Verify that the Google Cloud Deploy pipeline was created in [Google Cloud Deploy UI](https://console.cloud.google.com/deploy/delivery-pipelines)
 5. Setup a Cloud Build trigger for your repo
   * Navigate to [Cloud Build triggers page](https://console.cloud.google.com/cloud-build/triggers)
